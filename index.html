@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1020">
+<meta name="description" content="Compare live local times across cities and convert currencies with sourced exchange rates.">
+<title>Meridian — World Time & Currency</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<style>
+:root{color-scheme:dark;--bg:#090d18;--panel:#111827;--panel2:#151f31;--line:#273247;--muted:#91a0b8;--text:#f3f6fc;--cyan:#6ee7f9;--blue:#83a8ff;--green:#69e0b1;--red:#ff929c;--gold:#f4ca78;--radius:18px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% -20%,#182a4b 0,transparent 45%),var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}button,input,select{font:inherit}button{cursor:pointer}.shell{max-width:1420px;margin:auto;padding:28px clamp(16px,3vw,42px) 44px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:34px}.brand{display:flex;gap:12px;align-items:center}.brandmark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#8ef0fb,#7998ff);color:#081321;font-size:22px;font-weight:800}.brand h1{font:700 20px 'Space Grotesk',sans-serif;margin:0;letter-spacing:-.6px}.brand p{margin:3px 0 0;font-size:12px;color:var(--muted)}.local-chip{border:1px solid var(--line);background:#111827aa;border-radius:999px;padding:10px 14px;color:#c8d5e9;font-size:12px;display:flex;align-items:center;gap:8px}.pulse{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px #69e0b1}.hero{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:24px}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--cyan);font-weight:700}.hero h2{font:600 clamp(28px,4vw,44px) 'Space Grotesk',sans-serif;letter-spacing:-1.6px;margin:8px 0}.hero p{margin:0;color:var(--muted);max-width:580px;line-height:1.6;font-size:14px}.hero-date{text-align:right;color:var(--muted);font-size:12px;white-space:nowrap}.hero-date strong{display:block;color:var(--text);font:600 19px 'Space Grotesk';margin-top:5px}.grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(320px,.8fr);gap:18px;align-items:start}.panel{background:linear-gradient(150deg,#141d2d,#0f1624);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:0 18px 50px #00000017}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:20px 22px 16px}.panel-title{font:600 16px 'Space Grotesk';margin:0}.sub{color:var(--muted);font-size:12px;margin-top:5px}.badge{border:1px solid #30445b;color:var(--cyan);font-size:10px;text-transform:uppercase;letter-spacing:1px;padding:6px 9px;border-radius:99px}.search-row{padding:0 22px 18px;display:flex;gap:10px}.searchbox{position:relative;flex:1}.searchbox input{width:100%;padding:13px 14px 13px 42px;background:#0b1220;border:1px solid #2b3950;border-radius:11px;color:var(--text);outline:none}.searchbox input:focus{border-color:#6ee7f9;box-shadow:0 0 0 3px #6ee7f91a}.searchicon{position:absolute;left:14px;top:12px;color:var(--muted);font-size:17px}.btn{border:1px solid #34465f;border-radius:11px;padding:12px 15px;background:#1a2940;color:#e9f5ff;font-weight:600;font-size:12px;transition:.15s}.btn:hover{border-color:var(--cyan);transform:translateY(-1px)}.btn.primary{background:var(--cyan);border-color:var(--cyan);color:#06111d}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}.suggestions{margin:-10px 22px 16px;display:none;background:#0b1220;border:1px solid var(--line);border-radius:12px;overflow:hidden}.suggestions.open{display:block}.suggestion{width:100%;border:0;border-bottom:1px solid #202c3d;background:transparent;color:var(--text);text-align:left;padding:12px 14px;display:flex;justify-content:space-between;gap:12px}.suggestion:last-child{border-bottom:0}.suggestion:hover{background:#1c2b40}.suggestion small{color:var(--muted)}.map-wrap{padding:0 22px 20px}.map{height:320px;border:1px solid #29374b;border-radius:14px;overflow:hidden;background:#0a1220}.leaflet-container{background:#0a1220;font:12px 'DM Sans',sans-serif}.leaflet-control-attribution{font-size:9px!important}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#111c2d;color:#f3f6fc}.leaflet-popup-content{margin:10px 12px}.leaflet-control-zoom a{background:#111c2d!important;color:#f3f6fc!important;border-color:#34445b!important}.city-list{padding:0 22px 22px;display:grid;gap:10px}.city-card{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;background:#0d1523;border:1px solid #243249;border-radius:14px;padding:15px 16px}.city-meta{display:flex;align-items:center;gap:10px;min-width:0}.flag{font-size:23px}.city-name{font-weight:700;font-size:14px;overflow-wrap:anywhere}.city-country{color:var(--muted);font-size:11px;margin-top:4px}.clock{text-align:right}.clock-time{font:600 24px 'Space Grotesk';letter-spacing:-.8px;font-variant-numeric:tabular-nums}.clock-date{font-size:10px;color:var(--muted);margin-top:4px}.clock-diff{color:var(--cyan);font-size:10px;margin-top:5px}.card-actions{display:flex;gap:6px;justify-content:flex-end;margin-top:7px}.iconbtn{background:transparent;border:1px solid #2b3b52;border-radius:8px;color:#aebdd2;padding:5px 8px;font-size:11px}.iconbtn:hover{border-color:var(--red);color:var(--red)}.empty{border:1px dashed #31415a;border-radius:13px;padding:24px;text-align:center;color:var(--muted);font-size:13px}.side{display:grid;gap:18px}.converter{padding:0 22px 22px}.field-label{display:block;font-size:11px;color:var(--muted);margin:13px 0 7px}.field{width:100%;padding:12px 13px;background:#0b1220;border:1px solid #2b3950;border-radius:10px;color:var(--text);outline:none}.currency-row{display:grid;grid-template-columns:1fr 38px 1fr;gap:9px;align-items:end}.swap{height:42px;width:38px;padding:0;display:grid;place-items:center;font-size:17px}.result{margin-top:17px;padding:17px;background:linear-gradient(130deg,#142a3a,#14213a);border:1px solid #2e5263;border-radius:13px}.result-label{color:#a5b8ce;font-size:11px}.result-value{font:600 clamp(24px,3vw,32px) 'Space Grotesk';letter-spacing:-1px;margin:7px 0;overflow-wrap:anywhere}.result-note{font-size:10px;line-height:1.6;color:#a5b8ce}.rate-meta{margin-top:12px;color:var(--muted);font-size:10px;line-height:1.6}.convert-btn{width:100%;margin-top:13px}.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 22px 20px}.info-tile{background:#0d1523;border:1px solid #243249;border-radius:12px;padding:13px}.info-tile span{display:block;color:var(--muted);font-size:10px}.info-tile strong{display:block;font:600 15px 'Space Grotesk';margin-top:6px;overflow-wrap:anywhere}.footer{display:flex;justify-content:space-between;gap:15px;color:#697991;font-size:10px;margin-top:22px;line-height:1.6}.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:1000;padding:12px 16px;border-radius:10px;background:#1a2b3d;border:1px solid #38516b;color:var(--text);font-size:12px;transition:.2s;max-width:calc(100vw - 32px)}.toast.show{opacity:1;transform:translate(-50%,0)}.status{font-size:11px;color:var(--muted);padding:0 22px 16px;min-height:20px}.status.error{color:var(--red)}.status.success{color:var(--green)}.tiny{font-size:10px;color:var(--muted)}@media(max-width:900px){.grid{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}.map{height:290px}}@media(max-width:620px){.shell{padding:18px 12px 30px}.topbar{margin-bottom:26px}.hero{display:block}.hero-date{text-align:left;margin-top:18px}.side{grid-template-columns:1fr}.panel-head{padding:17px 16px 14px}.search-row{padding:0 16px 16px}.suggestions{margin-left:16px;margin-right:16px}.map-wrap{padding:0 16px 16px}.map{height:250px}.city-list{padding:0 16px 16px}.converter{padding:0 16px 17px}.info-grid{padding:0 16px 16px}.status{padding:0 16px 14px}.local-chip{font-size:10px;padding:8px 10px}.brand p{font-size:10px}.footer{display:block}.footer span{display:block;margin-bottom:5px}.clock-time{font-size:21px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="topbar"><div class="brand"><div class="brandmark">◷</div><div><h1>meridian<span style="color:var(--cyan)">.</span></h1><p>World time, thoughtfully connected</p></div></div><div class="local-chip"><span class="pulse"></span><span id="localLabel">Detecting your time zone…</span></div></header>
+<section class="hero"><div><div class="eyebrow">Your world, in sync</div><h2>Time is relative.<br><span style="color:var(--cyan)">Stay connected.</span></h2><p>Compare local times across the globe, find the right moment to connect, and convert currencies with transparent exchange-rate data.</p></div><div class="hero-date">YOUR LOCAL TIME<strong id="localClock">--:--:--</strong><span id="localDate">Loading local date…</span></div></section>
+<div class="grid">
+<section class="panel"><div class="panel-head"><div><h3 class="panel-title">World clock</h3><div class="sub">Search and pin the cities that matter to you.</div></div><span class="badge">Live · 1 sec</span></div>
+<div class="search-row"><div class="searchbox"><span class="searchicon">⌕</span><input id="citySearch" type="search" autocomplete="off" placeholder="Search a city, e.g. Tokyo or Pune" aria-label="Search cities"></div><button class="btn primary" id="searchBtn">Search</button></div><div class="suggestions" id="suggestions" role="listbox" aria-label="City search results"></div><div class="status" id="searchStatus" aria-live="polite">Search for a city to add it to your world clock.</div>
+<div class="map-wrap"><div id="map" class="map" role="application" aria-label="Map showing selected cities"></div><div class="tiny" style="margin-top:8px">Map © OpenStreetMap contributors · Powered by Leaflet</div></div>
+<div class="panel-head" style="padding-top:0"><div><h3 class="panel-title">Your cities <span id="cityCount" style="color:var(--muted);font-size:12px">(0)</span></h3><div class="sub">Your saved locations stay on this device.</div></div><button class="iconbtn" id="clearCities">Clear all</button></div><div class="city-list" id="cityList"></div>
+</section>
+<div class="side">
+<section class="panel"><div class="panel-head"><div><h3 class="panel-title">Currency converter</h3><div class="sub">Market reference rates, not a transaction quote.</div></div><span class="badge">FX</span></div><div class="converter">
+<label class="field-label" for="amount">Amount</label><input class="field" id="amount" type="number" min="0" step="any" value="1" inputmode="decimal">
+<div class="currency-row"><div><label class="field-label" for="fromCurrency">From</label><select class="field" id="fromCurrency"><option value="USD">USD — US Dollar</option></select></div><button class="btn swap" id="swapCurrencies" aria-label="Swap currencies" title="Swap currencies">⇄</button><div><label class="field-label" for="toCurrency">To</label><select class="field" id="toCurrency"><option value="INR">INR — Indian Rupee</option></select></div></div>
+<button class="btn primary convert-btn" id="convertBtn">Convert currency ↗</button><div class="result" aria-live="polite"><div class="result-label">Converted amount</div><div class="result-value" id="convertedValue">—</div><div class="result-note" id="rateLine">Choose currencies and convert to fetch a real rate.</div></div><div class="rate-meta" id="rateMeta">Rates by Frankfurter · Exchange rates may be delayed. No fabricated rates are shown.</div>
+</div><div class="status" id="currencyStatus" aria-live="polite"></div></section>
+<section class="panel"><div class="panel-head"><div><h3 class="panel-title">At a glance</h3><div class="sub">Your comparison reference</div></div></div><div class="info-grid"><div class="info-tile"><span>YOUR TIME ZONE</span><strong id="localZone">—</strong></div><div class="info-tile"><span>UTC OFFSET</span><strong id="localOffset">—</strong></div><div class="info-tile"><span>PINNED CITIES</span><strong id="summaryCount">0</strong></div><div class="info-tile"><span>REFERENCE CURRENCY</span><strong>INR ₹</strong></div></div></section>
+</div></div>
+<footer class="footer"><span>Meridian · Built for clearer global coordination.</span><span>Time data uses IANA time zones via your browser and Open-Meteo geocoding. Exchange rates are supplied by Frankfurter.</span></footer>
+</div><div class="toast" id="toast" role="status"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+const STORAGE_KEY = 'meridian.savedCities.v1';
+const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+const dateFmt = zone => new Intl.DateTimeFormat(undefined,{timeZone:zone,weekday:'short',year:'numeric',month:'short',day:'2-digit'});
+const timeFmt = zone => new Intl.DateTimeFormat(undefined,{timeZone:zone,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+const offsetAt = (date, zone) => {
+  const parts = new Intl.DateTimeFormat('en-US',{timeZone:zone,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(date);
+  const v = Object.fromEntries(parts.map(p=>[p.type,p.value]));
+  const asUTC = Date.UTC(+v.year,+v.month-1,+v.day,+v.hour,+v.minute,+v.second);
+  const mins = Math.round((asUTC - Math.floor(date.getTime()/1000)*1000)/60000);
+  const sign = mins < 0 ? '−' : '+', abs = Math.abs(mins);
+  return 'UTC' + sign + String(Math.floor(abs/60)).padStart(2,'0') + ':' + String(abs%60).padStart(2,'0');
+};
+const safeText = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const countryFlag = code => (code||'').toUpperCase().replace(/./g,c=>String.fromCodePoint(127397+c.charCodeAt(0))) || '🌐';
+let cities = [];
+try { const stored = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); if(Array.isArray(stored)) cities=stored.filter(c=>c&&typeof c.name==='string'&&typeof c.timezone==='string'&&Number.isFinite(c.latitude)&&Number.isFinite(c.longitude)).slice(0,12); } catch { localStorage.removeItem(STORAGE_KEY); }
+let map, markers = new Map(), searchTimer, toastTimer;
+function toast(message){$('toast').textContent=message;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2600);}
+function persist(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(cities));}catch{toast('Browser storage is unavailable. Your cities may not persist.');}}
+function initMap(){
+ if(!window.L){$('map').innerHTML='<div style="padding:24px;color:#91a0b8">Map library did not load. Check your connection or content blockers.</div>';return;}
+ map=L.map('map',{worldCopyJump:true}).setView([20,0],2);
+ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'}).addTo(map);
+ renderMarkers();
+}
+function markerIcon(){return L.divIcon({className:'',html:'<div style="width:15px;height:15px;border-radius:50%;background:#6ee7f9;border:3px solid #f3fbff;box-shadow:0 0 0 5px #6ee7f930,0 2px 8px #0008"></div>',iconSize:[15,15],iconAnchor:[7,7]});}
+function renderMarkers(){
+ if(!map)return;
+ for(const m of markers.values())m.remove();markers.clear();
+ cities.forEach(c=>{const m=L.marker([c.latitude,c.longitude],{icon:markerIcon()}).addTo(map);m.bindPopup('<strong>'+safeText(c.name)+'</strong><br>'+safeText(c.country||'')+'<br><span>'+safeText(c.timezone)+'</span>');markers.set(c.id,m);});
+ if(cities.length===1)map.setView([cities[0].latitude,cities[0].longitude],4);
+ else if(cities.length>1){const group=L.featureGroup([...markers.values()]);map.fitBounds(group.getBounds().pad(.2),{maxZoom:5});}
+}
+function renderCities(){
+ $('cityCount').textContent='('+cities.length+')';$('summaryCount').textContent=String(cities.length);
+ if(!cities.length){$('cityList').innerHTML='<div class="empty">No cities pinned yet.<br><span class="tiny">Search above to add your first location.</span></div>';renderMarkers();return;}
+ $('cityList').innerHTML=cities.map(c=>'<article class="city-card"><div class="city-meta"><span class="flag">'+countryFlag(c.countryCode)+'</span><div style="min-width:0"><div class="city-name">'+safeText(c.name)+'</div><div class="city-country">'+safeText([c.admin1,c.country].filter(Boolean).join(', '))+'</div><div class="clock-diff">'+safeText(c.timezone)+' · '+offsetAt(new Date(),c.timezone)+'</div><div class="city-country">'+safeText(c.currency ? c.currency.code+' · '+c.currency.name : 'Currency lookup available on demand')+'</div></div></div><div class="clock"><div class="clock-time" data-clock="'+safeText(c.id)+'">'+safeText(timeFmt(c.timezone).format(new Date()))+'</div><div class="clock-date" data-date="'+safeText(c.id)+'">'+safeText(dateFmt(c.timezone).format(new Date()))+'</div><div class="clock-diff">'+diffLabel(c.timezone)+'</div><div class="card-actions"><button class="iconbtn" data-focus="'+safeText(c.id)+'">Locate</button><button class="iconbtn" data-remove="'+safeText(c.id)+'" aria-label="Remove '+safeText(c.name)+'">Remove ×</button></div></div></article>').join('');
+ renderMarkers();
+}
+function diffLabel(zone){const delta=Math.round((new Date().getTimeZoneOffset?.()||0));const a=offsetMinutes(localZone),b=offsetMinutes(zone),d=b-a;const h=Math.floor(Math.abs(d)/60),m=Math.abs(d)%60;return d===0?'Same time as you':(d>0?'+' : '−')+h+'h '+String(m).padStart(2,'0')+'m vs you';}
+function offsetMinutes(zone){const d=new Date();const parts=new Intl.DateTimeFormat('en-US',{timeZone:zone,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(d);const v=Object.fromEntries(parts.map(p=>[p.type,p.value]));return Math.round((Date.UTC(+v.year,+v.month-1,+v.day,+v.hour,+v.minute,+v.second)-Math.floor(d.getTime()/1000)*1000)/60000);}
+function tick(){
+ const now=new Date();$('localClock').textContent=timeFmt(localZone).format(now);$('localDate').textContent=dateFmt(localZone).format(now);$('localLabel').textContent=localZone;$('localZone').textContent=localZone;$('localOffset').textContent=offsetAt(now,localZone);
+ cities.forEach(c=>{const clock=document.querySelector('[data-clock="'+CSS.escape(c.id)+'"]'),date=document.querySelector('[data-date="'+CSS.escape(c.id)+'"]');if(clock)clock.textContent=timeFmt(c.timezone).format(now);if(date)date.textContent=dateFmt(c.timezone).format(now);});
+}
+function status(el,msg,type=''){el.textContent=msg;el.className='status'+(type?' '+type:'');}
+async function searchCities(){
+ const q=$('citySearch').value.trim();$('suggestions').classList.remove('open');$('suggestions').innerHTML='';
+ if(q.length<2){status($('searchStatus'),'Enter at least 2 characters to search.','error');return;}
+ status($('searchStatus'),'Searching city and time-zone data…');
+ $('searchBtn').disabled=true;
+ try{
+  const url='https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(q)+'&count=8&language=en&format=json';
+  const response=await fetch(url,{headers:{Accept:'application/json'}});
+  if(!response.ok)throw new Error('City search service returned HTTP '+response.status);
+  const data=await response.json();const results=(data.results||[]).filter(x=>x.name&&x.timezone&&Number.isFinite(x.latitude)&&Number.isFinite(x.longitude));
+  if(!results.length){status($('searchStatus'),'No matching cities found. Try a nearby larger city or add the country name.','error');return;}
+  $('suggestions').innerHTML=results.map((r,i)=>'<button class="suggestion" role="option" data-result="'+i+'"><span><strong>'+safeText(r.name)+'</strong><br><small>'+safeText([r.admin1,r.country].filter(Boolean).join(', '))+'</small></span><small>'+safeText(r.timezone)+'</small></button>').join('');
+  $('suggestions').classList.add('open');status($('searchStatus'),'Choose the correct match below. '+results.length+' results found.','success');
+  $('suggestions').querySelectorAll('[data-result]').forEach(b=>b.addEventListener('click',()=>addCity(results[Number(b.dataset.result)])));
+ }catch(e){status($('searchStatus'),'Could not search cities. Check your connection and try again. ('+e.message+')','error');}
+ finally{$('searchBtn').disabled=false;}
+}
+async function addCity(r){
+ const id=[r.name,r.country_code,r.latitude.toFixed(3),r.longitude.toFixed(3)].join('-').toLowerCase();
+ if(cities.some(c=>c.id===id)){toast('That city is already pinned.');return;}
+ if(cities.length>=12){toast('You can pin up to 12 cities. Remove one to add another.');return;}
+ const city={id,name:r.name,admin1:r.admin1||'',country:r.country||'',countryCode:r.country_code||'',latitude:r.latitude,longitude:r.longitude,timezone:r.timezone,currency:null};
+ cities.push(city);persist();renderCities();tick();$('suggestions').classList.remove('open');$('citySearch').value='';status($('searchStatus'),r.name+' added to your world clock.','success');toast(r.name+' added');
+ if(map){const m=markers.get(id);if(m){map.setView([r.latitude,r.longitude],4);m.openPopup();}}
+ if(city.countryCode)loadCurrencyForCity(city);
+}
+async function loadCurrencyForCity(city){
+ try{
+  const res=await fetch('https://restcountries.com/v3.1/alpha/'+encodeURIComponent(city.countryCode)+'?fields=name,currencies');
+  if(!res.ok)throw new Error('Country currency lookup failed');
+  const d=await res.json();const obj=Array.isArray(d)?d[0]:d;const cur=obj&&obj.currencies?Object.entries(obj.currencies)[0]:null;
+  if(cur){city.currency={code:cur[0],name:cur[1].name||cur[0],symbol:cur[1].symbol||cur[0]};persist();renderCities();}
+ }catch{/* Currency lookup is optional; clock functionality remains available. */}
+}
+$('searchBtn').addEventListener('click',searchCities);
+$('citySearch').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();searchCities();}if(e.key==='Escape')$('suggestions').classList.remove('open');});
+$('citySearch').addEventListener('input',()=>{clearTimeout(searchTimer);if($('citySearch').value.trim().length>=3)searchTimer=setTimeout(searchCities,550);});
+document.addEventListener('click',e=>{if(e.target.closest('[data-remove]')){cities=cities.filter(c=>c.id!==e.target.closest('[data-remove]').dataset.remove);persist();renderCities();tick();}const focus=e.target.closest('[data-focus]');if(focus&&map){const c=cities.find(x=>x.id===focus.dataset.focus);if(c){map.setView([c.latitude,c.longitude],5);markers.get(c.id)?.openPopup();}}});
+$('clearCities').addEventListener('click',()=>{if(!cities.length)return;cities=[];persist();renderCities();tick();toast('All pinned cities removed.');});
+const currencyNames={};
+async function loadCurrencies(){
+ try{const res=await fetch('https://api.frankfurter.dev/v2/currencies');if(!res.ok)throw new Error('HTTP '+res.status);const data=await res.json();const entries=Object.entries(data).sort((a,b)=>a[0].localeCompare(b[0]));for(const [id,name] of entries)currencyNames[id]=name;
+  for(const select of [$('fromCurrency'),$('toCurrency')]){const selected=select.value;select.innerHTML=entries.map(([code,name])=>'<option value="'+safeText(code)+'">'+safeText(code+' — '+name)+'</option>').join('');select.value=selected;}
+ }catch(e){status($('currencyStatus'),'Currency list unavailable. You can still try USD and INR if listed. '+e.message,'error');}
+}
+async function convert(){
+ const amount=Number($('amount').value),from=$('fromCurrency').value,to=$('toCurrency').value;
+ if(!Number.isFinite(amount)||amount<0||$('amount').value.trim()===''){status($('currencyStatus'),'Enter a valid amount greater than or equal to zero.','error');return;}
+ $('convertBtn').disabled=true;status($('currencyStatus'),'Fetching the latest available reference rate…');
+ $('convertedValue').textContent='Loading…';$('rateLine').textContent='Waiting for provider response.';$('rateMeta').textContent='Source: Frankfurter · Loading rate metadata…';
+ try{
+  if(from===to){$('convertedValue').textContent=new Intl.NumberFormat(undefined,{style:'currency',currency:to,maximumFractionDigits:2}).format(amount);$('rateLine').textContent='1 '+from+' = 1 '+to;$('rateMeta').textContent='Same-currency conversion; no external exchange rate required.';status($('currencyStatus'),'Converted successfully.','success');return;}
+  const res=await fetch('https://api.frankfurter.dev/v2/rate/'+encodeURIComponent(from)+'/'+encodeURIComponent(to));
+  if(!res.ok)throw new Error(res.status===404?'No rate available for this currency pair.':'Rate provider returned HTTP '+res.status);
+  const d=await res.json();if(!Number.isFinite(d.rate)||!d.date)throw new Error('Provider returned an invalid rate response.');
+  const converted=amount*d.rate;$('convertedValue').textContent=new Intl.NumberFormat(undefined,{style:'currency',currency:to,maximumFractionDigits:4}).format(converted);
+  $('rateLine').textContent='1 '+from+' = '+new Intl.NumberFormat(undefined,{maximumFractionDigits:6}).format(d.rate)+' '+to;
+  $('rateMeta').textContent='Source: Frankfurter · Rate date: '+d.date+'. Reference rates may be delayed and may differ from provider/bank transaction rates.';
+  status($('currencyStatus'),'Conversion complete using a provider response.','success');
+ }catch(e){$('convertedValue').textContent='Unavailable';$('rateLine').textContent='No rate displayed because a valid provider response was not received.';$('rateMeta').textContent='Source: Frankfurter · '+e.message;status($('currencyStatus'),'Could not fetch a currency rate. Check your connection or try another currency pair. '+e.message,'error');}
+ finally{$('convertBtn').disabled=false;}
+}
+$('convertBtn').addEventListener('click',convert);
+$('swapCurrencies').addEventListener('click',()=>{const a=$('fromCurrency').value,b=$('toCurrency').value;$('fromCurrency').value=b;$('toCurrency').value=a;convert();});
+$('amount').addEventListener('keydown',e=>{if(e.key==='Enter')convert();});
+initMap();renderCities();tick();setInterval(tick,1000);loadCurrencies().then(()=>{if($('fromCurrency').value==='USD'&&$('toCurrency').value==='INR')convert();});
+})();
+</script>
+</body>
+</html>
